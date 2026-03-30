@@ -36,3 +36,18 @@ class CustomCard(Card):
     def __init__(self, question, answer):
         self.question = question
         self.answer = answer
+
+class MultipleChoiceCard(CustomCard):
+    def __init__(self, question, answer):
+        self.question = question
+        self.answer = answer
+
+class CodeCard(CustomCard):
+    def __init__(self, question, answer):
+        self.question = question
+        self.answer = answer
+
+class QuestionCard(CustomCard):
+    def __init__(self, question, answer):
+        self.question = question
+        self.answer = answer
