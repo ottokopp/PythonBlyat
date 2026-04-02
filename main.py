@@ -1,4 +1,4 @@
-from fsrs import Card
+
 
 '''
 SRS modelliert:
@@ -29,25 +29,79 @@ Reset-artiges Verhalten                                 je schwerer (D hoch) →
 
 '''
 
-from fsrs import Card
-from datetime import datetime
+from fsrs import Scheduler, Card, Rating, ReviewLog
+from datetime import datetime, timezone  
 
 class CustomCard(Card):
     def __init__(self, question, answer):
+        super().__init__() 
         self.question = question
         self.answer = answer
 
 class MultipleChoiceCard(CustomCard):
     def __init__(self, question, answer):
-        self.question = question
-        self.answer = answer
+        super().__init__(question, answer) #kommt aus card klasse deshalb keine deklaration
 
 class CodeCard(CustomCard):
+     def __init__(self, question, answer):
+        super().__init__(question, answer) #kommt aus card klasse deshalb keine deklaration
+
+class SimpleCard(CustomCard):
     def __init__(self, question, answer):
+        super().__init__(question, answer) #kommt aus card klasse deshalb keine deklaration
+
+    def __repr__(self):
+        return f"SimpleCard(question='{self.question}',answer='{self.answer}' stability={self.stability})" #ist stablity funktion aus fsrs
+
+
+
+
+class Reviewer:
+    def __init__(self):
+        self.scheduler = Scheduler()
+        self.review_history = []
+        self.total_reviews = 0 
+    
+    def review(self, card, user_answer):
+        if user_answer != card.answer:
+            rating = Rating.Again
+        else:
+            rating = Rating.Good 
+            #TODO: implementieren timer version
+
+        now = datetime.now(timezone.utc)
+
+        reviewed_card, log = self.scheduler.review_card(card, rating, now)
+
+        #history log
+        self.review_history.append(log)
+        self.total_reviews += 1
+
+        return reviewed_card, log
+
+reviewer = Reviewer()
+karte = SimpleCard("Größte Stadt Kasachstans", "Almaty")
+
+# Review durchführen
+neue_karte, log = reviewer.review(karte, "Almaty")
+
+print(neue_karte)
+print(f"Rating: {log.rating.name}")  
+
+#TODO to_dict() und customtodict()
+print(f"Nächster Review der Karte: {neue_karte.due}") #due ist wann man wieder karte lernen soll
+#print(f"Nächster Review in: {log.scheduled_days} Days")
+
+'''
+class CustomCard(Card):
+    def init(self, id, question, answer):
+        super().init(id)
         self.question = question
         self.answer = answer
 
-class QuestionCard(CustomCard):
-    def __init__(self, question, answer):
-        self.question = question
-        self.answer = answer
+
+card = CustomCard(1, "What is the capital of France?", "Paris")
+card_dict = card.to_dict()
+
+card_dict["stability"]
+card_dict["due"]'''
