@@ -31,6 +31,7 @@ Reset-artiges Verhalten                                 je schwerer (D hoch) →
 
 from fsrs import Scheduler, Card, Rating, ReviewLog
 from datetime import datetime, timezone  
+import time
 
 class CustomCard(Card):
     def __init__(self, question, answer):
@@ -62,12 +63,22 @@ class Reviewer:
         self.review_history = []
         self.total_reviews = 0 
     
-    def review(self, card, user_answer):
+    def time_dependend_rating(self, answer_time_seconds):
+        if answer_time_seconds <= 5:
+            return Rating.Easy    
+        elif answer_time_seconds <= 10:
+            return Rating.Good    
+        elif answer_time_seconds <= 60:
+            return Rating.Hard     
+        else:
+            return Rating.Again
+
+    def review(self, card, user_answer, answer_time_seconds):
         if user_answer != card.answer:
             rating = Rating.Again
         else:
-            rating = Rating.Good 
-            #TODO: implementieren timer version
+            rating = self.time_dependend_rating(answer_time_seconds)
+
 
         now = datetime.now(timezone.utc)
 
@@ -81,9 +92,14 @@ class Reviewer:
 
 reviewer = Reviewer()
 karte = SimpleCard("Größte Stadt Kasachstans", "Almaty")
+start_time = time.time()
+
+print(f"FRAGE: {karte.question}")
+user_answer = input("\nDeine Antwort: ")
+antwortdauer = time.time() - start_time
 
 # Review durchführen
-neue_karte, log = reviewer.review(karte, "Almaty")
+neue_karte, log = reviewer.review(karte, user_answer, antwortdauer)
 
 print(neue_karte)
 print(f"Rating: {log.rating.name}")  
