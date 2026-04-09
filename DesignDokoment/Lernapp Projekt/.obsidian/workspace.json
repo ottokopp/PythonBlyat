@@ -1,42 +1,20 @@
 {
   "main": {
-    "id": "3def9791165d7665",
+    "id": "d039c3b68327d881",
     "type": "split",
     "children": [
       {
-        "id": "d45e671d6becde77",
+        "id": "4091478afa07a4d1",
         "type": "tabs",
-        "dimension": 47.02194357366771,
         "children": [
           {
-            "id": "a6ac73bb07f40d75",
+            "id": "66340693b4135f6a",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Lernapp Projekt/04_Gameplay/WahrFalsch_System.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "WahrFalsch_System"
-            }
-          }
-        ]
-      },
-      {
-        "id": "91233776440594ec",
-        "type": "tabs",
-        "dimension": 52.97805642633229,
-        "children": [
-          {
-            "id": "e5d75f04beaaa0e0",
-            "type": "leaf",
-            "state": {
-              "type": "graph",
+              "type": "empty",
               "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph-Ansicht"
+              "icon": "lucide-file",
+              "title": "Neuer Tab"
             }
           }
         ]
@@ -45,15 +23,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "9542f97672e44a0c",
+    "id": "ed06a73c9acedab0",
     "type": "split",
     "children": [
       {
-        "id": "05b0e31835e028fb",
+        "id": "a330410b7523f080",
         "type": "tabs",
         "children": [
           {
-            "id": "ab9e81506aca778b",
+            "id": "3d781af01ba12110",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -66,7 +44,7 @@
             }
           },
           {
-            "id": "2a22eddca0502ad9",
+            "id": "9ca1b60cb2d21b73",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -83,7 +61,7 @@
             }
           },
           {
-            "id": "5ec4682fe184ae89",
+            "id": "25461ce70b161d76",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -96,23 +74,22 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 300
   },
   "right": {
-    "id": "e2faff02babacd81",
+    "id": "539663af5151ebe2",
     "type": "split",
     "children": [
       {
-        "id": "1daa2d6074d39bdb",
+        "id": "5178278f05ff88fc",
         "type": "tabs",
         "children": [
           {
-            "id": "6643de5b330e029f",
+            "id": "a8a3e8d59830eb00",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Lernapp Projekt/04_Gameplay/WahrFalsch_System.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -122,25 +99,24 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Rückverweise auf WahrFalsch_System"
+              "title": "Rückverweise"
             }
           },
           {
-            "id": "9e1aa1d0648f5890",
+            "id": "4ec877d9dbeb9a2d",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Lernapp Projekt/04_Gameplay/Fragetypen.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Ausgehende Links von Fragetypen öffnen"
+              "title": "Ausgehende Links"
             }
           },
           {
-            "id": "907f0b48622037a3",
+            "id": "121cf06a661ce44f",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -155,7 +131,7 @@
             }
           },
           {
-            "id": "7583ec33485f838c",
+            "id": "23104a2f7034e120",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -169,25 +145,25 @@
             }
           },
           {
-            "id": "848638c28408114c",
+            "id": "663832f5e4e7c67f",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "Lernapp Projekt/04_Gameplay/Fragetypen.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Gliederung von Fragetypen"
+              "title": "Gliederung"
             }
           }
         ]
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -200,45 +176,6 @@
       "bases:Neue Base erstellen": false
     }
   },
-  "active": "ab9e81506aca778b",
-  "lastOpenFiles": [
-    "Lernapp Projekt/04_Gameplay/Lückentext.md",
-    "Lernapp Projekt/04_Gameplay/Codefrage.md",
-    "Lernapp Projekt/04_Gameplay/WahrFalsch_System.md",
-    "Lernapp Projekt/00_Projektübersicht.md",
-    "Lernapp Projekt/04_Gameplay/Turingmaschinen_System.md",
-    "Lernapp Projekt/04_Gameplay/MultipleChoice_System.md",
-    "Lernapp Projekt/04_Gameplay/Fragetypen.md",
-    "Lernapp Projekt/03_Design/Retro_Zimmer.md",
-    "Lernapp Projekt/03_Design/Motherboard.md",
-    "Lernapp Projekt/03_Design/Logo.md",
-    "Lernapp Projekt/03_Design/Icons.md",
-    "Lernapp Projekt/03_Design/Charakter.md",
-    "Lernapp Projekt/02_Bildschirme/WahrFalsch_Frage.md",
-    "Lernapp Projekt/02_Bildschirme/Turingmaschine_Aufgaben.md",
-    "Lernapp Projekt/02_Bildschirme/Startbildschirm.md",
-    "Lernapp Projekt/02_Bildschirme/Splashscreen.md",
-    "Lernapp Projekt/02_Bildschirme/Quizfragen (Multiple Choice).md",
-    "Lernapp Projekt/02_Bildschirme/Levelübersicht.md",
-    "Lernapp Projekt/02_Bildschirme/Hauptmenü.md",
-    "Lernapp Projekt/02_Bildschirme/Fortschrittsbildschirm.md",
-    "Lernapp Projekt/02_Bildschirme/Ergebnisbildschirm.md",
-    "Lernapp Projekt/02_Bildschirme/Einstellungen.md",
-    "Lernapp Projekt/01_App_Konzept/Spielmechaniken.md",
-    "Lernapp Projekt/01_App_Konzept/Levelsystem.md",
-    "Lernapp Projekt/00_Projektübersicht/#Projektübersicht.md",
-    "Lernapp Projekt/01_App_Konzept/Grundidee.md",
-    "Unbenannt.base",
-    "Unbenannt.canvas",
-    "Unbenannt 1.canvas",
-    "Lernapp Projekt/07_Zukünftige_Features",
-    "Lernapp Projekt/06_Technische_Struktur",
-    "Lernapp Projekt/05_User_System",
-    "Lernapp Projekt/04_Gameplay",
-    "Lernapp Projekt/03_Design",
-    "Lernapp Projekt/02_Bildschirme",
-    "Lernapp Projekt/01_App_Konzept",
-    "Lernapp Projekt/00_Projektübersicht",
-    "01_app_Konzept"
-  ]
+  "active": "66340693b4135f6a",
+  "lastOpenFiles": []
 }

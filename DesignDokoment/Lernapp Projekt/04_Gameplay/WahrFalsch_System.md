@@ -18,3 +18,20 @@ Der Nutzer bekommt eine Aussage und muss entscheiden, ob diese wahr oder falsch 
 - Überprüfung der Antwort  
 - Rückmeldung an den Nutzer  
 - Weiterleitung zur nächsten Aufgabe
+
+## Beispiel  
+  
+Aussage:  
+Eine Schleife wird verwendet, um Code mehrfach auszuführen.  
+  
+Richtige Antwort:  
+Wahr  
+  
+## Darstellung  
+  
+[ Aussage: Eine Schleife wird verwendet, um Code mehrfach auszuführen ]  
+  
+[ Wahr ] [ Falsch ]  
+  
+→ Nutzer wählt eine Option  
+→ System gibt Feedback
