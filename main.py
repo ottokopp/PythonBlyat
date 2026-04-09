@@ -39,6 +39,20 @@ class CustomCard(Card):
         self.question = question
         self.answer = answer
 
+    def to_dict(self):
+        return {
+            'question': self.question,
+            'answer': self.answer,
+            'card_type': self.__class__.__name__,
+            'due': self.due,
+            'stability': self.stability,
+            'difficulty': self.difficulty,
+            'reps': self.reps if hasattr(self, 'reps') else 0,
+            'lapses': self.lapses if hasattr(self, 'lapses') else 0,
+            'state': self.state,
+            'last_review': self.last_review.isoformat() if self.last_review else None #Isoformat macht aus date String, weil sonst cancer
+        }
+    
 class MultipleChoiceCard(CustomCard):
     def __init__(self, question, answer):
         super().__init__(question, answer) #kommt aus card klasse deshalb keine deklaration
@@ -52,7 +66,7 @@ class SimpleCard(CustomCard):
         super().__init__(question, answer) #kommt aus card klasse deshalb keine deklaration
 
     def __repr__(self):
-        return f"SimpleCard(question='{self.question}',answer='{self.answer}' stability={self.stability})" #ist stablity funktion aus fsrs
+        return f"SimpleCard(question='{self.question}',answer='{self.answer}', stability={self.stability})" #ist stablity funktion aus fsrs
 
 
 
@@ -79,7 +93,6 @@ class Reviewer:
         else:
             rating = self.time_dependend_rating(answer_time_seconds)
 
-
         now = datetime.now(timezone.utc)
 
         reviewed_card, log = self.scheduler.review_card(card, rating, now)
@@ -92,14 +105,25 @@ class Reviewer:
 
 reviewer = Reviewer()
 karte = SimpleCard("Größte Stadt Kasachstans", "Almaty")
-start_time = time.time()
 
+start_time = time.time()
 print(f"FRAGE: {karte.question}")
-user_answer = input("\nDeine Antwort: ")
+user_answer = input("Deine Antwort: ")
 antwortdauer = time.time() - start_time
 
 # Review durchführen
 neue_karte, log = reviewer.review(karte, user_answer, antwortdauer)
+
+print("Attribute der neuen Karte:")
+print(dir(neue_karte))
+
+#to_dict() test test 
+test_dict = neue_karte.to_dict()
+print(test_dict['question'])    
+print(test_dict['answer'])      
+print("Stability:", test_dict['stability'])    
+print("Due:", test_dict['due'])   
+
 
 print(neue_karte)
 print(f"Rating: {log.rating.name}")  
@@ -107,17 +131,3 @@ print(f"Rating: {log.rating.name}")
 #TODO to_dict() und customtodict()
 print(f"Nächster Review der Karte: {neue_karte.due}") #due ist wann man wieder karte lernen soll
 #print(f"Nächster Review in: {log.scheduled_days} Days")
-
-'''
-class CustomCard(Card):
-    def init(self, id, question, answer):
-        super().init(id)
-        self.question = question
-        self.answer = answer
-
-
-card = CustomCard(1, "What is the capital of France?", "Paris")
-card_dict = card.to_dict()
-
-card_dict["stability"]
-card_dict["due"]'''
