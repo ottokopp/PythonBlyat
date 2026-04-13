@@ -49,3 +49,7 @@ def get_collection(collection_name: str):
         doc["_id"] = str(doc["_id"])
         data.append(doc)
     return data
+
+if __name__ == "__main__":                                  # 
+    import uvicorn
+    uvicorn.run("api:app", host="127.0.0.1", port=8000)
