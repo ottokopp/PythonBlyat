@@ -28,8 +28,8 @@ Reset-artiges Verhalten                                 je schwerer (D hoch) →
 
 
 '''
-
 from fsrs import Scheduler, Card, Rating, ReviewLog
+print("Import erfolgreich!")
 from datetime import datetime, timezone  
 import time
 
@@ -47,16 +47,29 @@ class CustomCard(Card):
             'due': self.due,
             'stability': self.stability,
             'difficulty': self.difficulty,
+            #reps ist wie oft habe ich die Karte wiederholt und lapses wie oft vergessen. Beide fangen bei 0 an zu zählen.
             'reps': self.reps if hasattr(self, 'reps') else 0,
             'lapses': self.lapses if hasattr(self, 'lapses') else 0,
             'state': self.state,
             'last_review': self.last_review.isoformat() if self.last_review else None #Isoformat macht aus date String, weil sonst cancer
         }
+
+    #def from_dict():
     
 class MultipleChoiceCard(CustomCard):
-    def __init__(self, question, answer):
+    def __init__(self, question, answer, options):
         super().__init__(question, answer) #kommt aus card klasse deshalb keine deklaration
-
+        self.options = options
+    
+    def check_answer(self, user_input):
+        for i, option in enumerate(self.options):
+            if self.answer == option: 
+                return int(user_input) == i + 1  
+        return False
+    
+    def __repr__(self):
+        return f"SimpleCard(question='{self.question}',answer='{self.answer}', stability={self.stability})"
+         
 class CodeCard(CustomCard):
      def __init__(self, question, answer):
         super().__init__(question, answer) #kommt aus card klasse deshalb keine deklaration
@@ -65,6 +78,9 @@ class SimpleCard(CustomCard):
     def __init__(self, question, answer):
         super().__init__(question, answer) #kommt aus card klasse deshalb keine deklaration
 
+    def check_answer(self, user_input):
+        return user_input == self.answer
+    
     def __repr__(self):
         return f"SimpleCard(question='{self.question}',answer='{self.answer}', stability={self.stability})" #ist stablity funktion aus fsrs
 
@@ -77,7 +93,7 @@ class Reviewer:
         self.review_history = []
         self.total_reviews = 0 
     
-    def time_dependend_rating(self, answer_time_seconds):
+    def time_dependent_rating(self, answer_time_seconds):
         if answer_time_seconds <= 5:
             return Rating.Easy    
         elif answer_time_seconds <= 10:
@@ -88,10 +104,10 @@ class Reviewer:
             return Rating.Again
 
     def review(self, card, user_answer, answer_time_seconds):
-        if user_answer != card.answer:
-            rating = Rating.Again
+        if card.check_answer(user_answer):
+            rating = self.time_dependent_rating(answer_time_seconds)
         else:
-            rating = self.time_dependend_rating(answer_time_seconds)
+            rating = Rating.Again
 
         now = datetime.now(timezone.utc)
 
@@ -119,15 +135,26 @@ print(dir(neue_karte))
 
 #to_dict() test test 
 test_dict = neue_karte.to_dict()
-print(test_dict['question'])    
-print(test_dict['answer'])      
-print("Stability:", test_dict['stability'])    
-print("Due:", test_dict['due'])   
+print("Frage:", test_dict["question"])    
+print("Antwort:", test_dict["answer"])     
+print("Wiederholungen:", test_dict["reps"]) 
+print("Stability:", test_dict["stability"])    
+print("Due:", test_dict["due"])   
 
 
 print(neue_karte)
 print(f"Rating: {log.rating.name}")  
-
-#TODO to_dict() und customtodict()
 print(f"Nächster Review der Karte: {neue_karte.due}") #due ist wann man wieder karte lernen soll
-#print(f"Nächster Review in: {log.scheduled_days} Days")
+
+karte2 = MultipleChoiceCard("Nachnahme des Wer Wird Milionär Hosts:", "Lauch", ["Lauch", "Hitler", "Epstein", "Diddler"])
+start_time = time.time()
+print(f"FRAGE: {karte2.question}")
+print(f"FRAGE: {karte2.options}")
+user_answer = input("Deine Antwort: ")
+antwortdauer = time.time() - start_time
+
+neue_karte2, log = reviewer.review(karte2, user_answer, antwortdauer)
+
+print(neue_karte2)
+print(f"Rating: {log.rating.name}")  
+print(f"Nächster Review der Karte: {neue_karte2.due}") #due ist wann man wieder karte lernen soll
