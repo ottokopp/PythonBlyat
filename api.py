@@ -4,15 +4,12 @@ from fastapi import FastAPI
 client = MongoClient("mongodb://116.203.251.38:27017")      # Verbindung zur MongoDB
 db = client["testdb"]       
 collection = db["test"]     
-app = FastAPI()             
-
-result = collection.insert_one({"name": "Patrick"})         # Dokument einfügen
-print("Inserted ID:", result.inserted_id)               
+app = FastAPI()                      
 
 for doc in collection.find():                               # Alle Dokumente abrufen
     print(doc)
 
-@app.get("/")                                               # Root-Endpoint
+@app.get("/health")                                               # Root-Endpoint
 def root():
     return {"message": "API läuft"}
 
@@ -52,4 +49,4 @@ def get_collection(collection_name: str):
 
 if __name__ == "__main__":                                  # 
     import uvicorn
-    uvicorn.run("api:app", host="127.0.0.1", port=8000)
+    uvicorn.run("api:app", host="127.0.0.1", port=8008)
