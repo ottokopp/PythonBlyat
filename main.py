@@ -34,6 +34,9 @@ from datetime import datetime, timezone
 import time
 
 class CustomCard(Card):
+
+    #TODO self.override_review_params ={"review_time", ... "} zusätzlicher Parameter für Zeit bei Karten
+
     def __init__(self, question, answer):
         super().__init__() 
         self.question = question
@@ -85,7 +88,51 @@ class SimpleCard(CustomCard):
         return f"SimpleCard(question='{self.question}',answer='{self.answer}', stability={self.stability})" #ist stablity funktion aus fsrs
 
 
+class User:
+        
+    def __init__(self, username: str, email: str = None):
 
+        #UserAtrributis
+        self.username = username
+        self.useremail = email
+        self.created_at = datetime.now(timezone.utc)
+
+        #später umschreiben in decks
+        self.cards = []
+        self.reviewer = Reviewer()  # Jeder User hat seinen eigenen Reviewer
+        self.stats = {"total": 0, "correct": 0}
+
+        #Statistik für spätere Auswertungen
+        self.total_reviews = 0
+        self.correct_reviews = 0
+
+
+    def add_card(self, card):
+        self.cards.append(card)
+
+    def remove_card(self, card):
+        #TODO wenn es eine Add card gibt muss es wahrscheinlich auch eine remove card geben
+        return 
+
+    def add_deck(self, deck_name: str):
+        return deck_name
+    
+    def get_due_cards(self):
+        #gibt Stand jetzt alle Karten zurück
+        return self.cards
+    
+    def update_card(self, old_card, new_card):
+        for i, card in enumerate(self.cards):
+            if card is old_card:
+                self.cards[i] = new_card
+                print("Card Update great Succseessss!")
+                return True
+        return False
+
+    
+    
+    
+#TODO Session Klasse erstellen
 
 class Reviewer:
     def __init__(self):
@@ -120,9 +167,39 @@ class Reviewer:
         return reviewed_card, log
 
 reviewer = Reviewer()
+name = input("dein Name:")
+email = input("dein e-mail:")
+user = User(name, email)
 karte = SimpleCard("Größte Stadt Kasachstans", "Almaty")
+karte2 = MultipleChoiceCard("Nachnahme des Wer Wird Milionär Hosts:", "Lauch", ["Lauch", "Hitler", "Epstein", "Diddler"])
+karte3 = SimpleCard("Türkische Wort für das männliche Glied", "Yarak")
 
-start_time = time.time()
+user.add_card(karte)
+user.add_card(karte2)
+user.add_card(karte3)
+karten = user.get_due_cards()
+
+print(f"Hallo Lord {user.username}!")
+
+for card in user.get_due_cards():
+    print(f"{card.question}")   
+    # multiple-Choice-fuck
+    if hasattr(card, 'options'):
+        for i, option in enumerate(card.options, 1):
+            print(f"  {i}. {option}")
+    
+    start_time = time.time()
+    user_answer = input("\nDeine Antwort: ")
+    antwortdauer = time.time() - start_time
+
+    neue_karte, log = user.reviewer.review(card, user_answer, antwortdauer)
+    print(neue_karte)
+    print(f"Rating: {log.rating.name}")  
+    print(f"Nächster Review der Karte: {neue_karte.due}")
+    
+    user.update_card(card, neue_karte)
+
+""" start_time = time.time()
 print(f"FRAGE: {karte.question}")
 user_answer = input("Deine Antwort: ")
 antwortdauer = time.time() - start_time
@@ -157,4 +234,4 @@ neue_karte2, log = reviewer.review(karte2, user_answer, antwortdauer)
 
 print(neue_karte2)
 print(f"Rating: {log.rating.name}")  
-print(f"Nächster Review der Karte: {neue_karte2.due}") #due ist wann man wieder karte lernen soll
+print(f"Nächster Review der Karte: {neue_karte2.due}") #due ist wann man wieder karte lernen soll """
