@@ -74,8 +74,12 @@ class MultipleChoiceCard(CustomCard):
         return f"SimpleCard(question='{self.question}',answer='{self.answer}', stability={self.stability})"
          
 class CodeCard(CustomCard):
-     def __init__(self, question, answer):
+    def __init__(self, question, answer):
         super().__init__(question, answer) #kommt aus card klasse deshalb keine deklaration
+
+class ClozeCard(Customcard):
+    def __init__(self, question, answer)
+        super().__init__(question, answer)
 
 class SimpleCard(CustomCard):
     def __init__(self, question, answer):
@@ -132,6 +136,8 @@ class User:
     
     
 class Session:
+    #Session beginnt mit einloggen des Users.
+    #Session endet mit 
     def __init__(self, username: str):
         self.username = username
         self.when_loggedin = datetime.now(timezone.utc)
