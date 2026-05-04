@@ -131,8 +131,28 @@ class User:
 
     
     
-    
-#TODO Session Klasse erstellen
+class Session:
+    def __init__(self, username: str):
+        self.username = username
+        self.when_loggedin = datetime.now(timezone.utc)
+        self.when_exited: Optional[datetime] = None
+        self.cards_reviewed: List = []
+        self.tasks_started: int = 0
+        self.tasks_completed: int = 0
+
+    def start_task(self):
+        self.tasks_started += 1
+        
+    def complete_task(self):
+        self.tasks_completed += 1
+        
+    def add_card_reviewed(self, card):
+        self.cards_reviewed.append(card)
+        
+    def end_session(self):
+        self.when_exited = datetime.now(timezone.utc)
+
+    #TODO sessiondauer und auswertung machen
 
 class Reviewer:
     def __init__(self):
