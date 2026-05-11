@@ -28,12 +28,14 @@ Reset-artiges Verhalten                                 je schwerer (D hoch) →
 
 
 '''
-from fsrs import Scheduler, Card, Rating, ReviewLog
+from fsrs import Scheduler, Card as FSRSCard, Rating, ReviewLog
 print("Import erfolgreich!")
 from datetime import datetime, timezone  
 import time
+from abc import ABC, abstractmethod
 
-class CustomCard(Card):
+
+class CustomCard(FSRSCard):
 
     #TODO self.override_review_params ={"review_time", ... "} zusätzlicher Parameter für Zeit bei Karten
 
@@ -41,6 +43,16 @@ class CustomCard(Card):
         super().__init__() 
         self.question = question
         self.answer = answer
+
+    @abstractmethod
+    def check_answer(self, user_input: Any) -> bool:
+        #Chek _answer muss mit Liste oder Int oder String gebaut werden
+        pass
+
+    @abstractmethod
+    def display_question(self) -> str:
+        #wichtig bei MulitpleChosie Card wegen Optionen
+        pass
 
     def to_dict(self):
         return {
@@ -70,23 +82,37 @@ class MultipleChoiceCard(CustomCard):
                 return int(user_input) == i + 1  
         return False
     
+    def display_question(self) -> str:
+        options_lines = []
+        for i, opt in enumerate(self.options):
+            options_lines.append(f"  {i+1}. {opt}")
+        
+        options_text = "\n".join(options_lines)
+        return f"{self.question}\n{options_text}"
+    
     def __repr__(self):
         return f"SimpleCard(question='{self.question}',answer='{self.answer}', stability={self.stability})"
          
 class CodeCard(CustomCard):
-    def __init__(self, question, answer):
-        super().__init__(question, answer) #kommt aus card klasse deshalb keine deklaration
-
-class ClozeCard(Customcard):
-    def __init__(self, question, answer)
-        super().__init__(question, answer)
+    def check_answer(self, user_input) -> bool:
+        return user_input== self.answer
+    
+    def display_question(self) -> str:
+        return f"Frage: {self.question}"
+    
+class ClozeCard(CustomCard):
+    def check_answer(self, user_input) -> bool:
+        return user_input== self.answer
+    
+    def display_question(self) -> str:
+        return f"Frage: {self.question}"
 
 class SimpleCard(CustomCard):
-    def __init__(self, question, answer):
-        super().__init__(question, answer) #kommt aus card klasse deshalb keine deklaration
-
-    def check_answer(self, user_input):
-        return user_input == self.answer
+    def check_answer(self, user_input) -> bool:
+        return user_input== self.answer
+    
+    def display_question(self) -> str:
+        return f"Frage: {self.question}"
     
     def __repr__(self):
         return f"SimpleCard(question='{self.question}',answer='{self.answer}', stability={self.stability})" #ist stablity funktion aus fsrs
@@ -137,14 +163,23 @@ class User:
     
 class Session:
     #Session beginnt mit einloggen des Users.
-    #Session endet mit 
+    #Session endet mit beenden der App
+    #history auswertung
+    #stackausertung, volume change, öffnet settings
+    #"im Besten mit abstrackten klassen arbeiten"
     def __init__(self, username: str):
         self.username = username
-        self.when_loggedin = datetime.now(timezone.utc)
-        self.when_exited: Optional[datetime] = None
+        self.start_time = datetime.now(timezone.utc)
+        self.end_time = None
+        self.is_active = True
         self.cards_reviewed: List = []
         self.tasks_started: int = 0
         self.tasks_completed: int = 0
+        
+        
+
+    def start_session(user: User) -> Session:
+        return Session(user)
 
     def start_task(self):
         self.tasks_started += 1
