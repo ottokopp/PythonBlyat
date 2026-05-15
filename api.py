@@ -10,7 +10,7 @@ app = FastAPI()
 def root():
     return {"message": "API läuft"}
 
-@app.get("/add_user")                                       # Benutzer hinzufügen
+@app.post("/add_user")                                       # Benutzer hinzufügen
 def add_user(user_dict: dict):
 
     if db["users"].find_one({"name": user_dict["name"]}):
