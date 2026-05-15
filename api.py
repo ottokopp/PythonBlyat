@@ -6,17 +6,18 @@ db = client["testdb"]
 collection = db["test"]     
 app = FastAPI()                      
 
-for doc in collection.find():                               # Alle Dokumente abrufen
-    print(doc)
-
 @app.get("/health")                                         # Root-Endpoint
 def root():
     return {"message": "API läuft"}
 
 @app.get("/add_user")                                       # Benutzer hinzufügen
-def add_user(name: str):
-    result = db["users"].insert_one({"name": name})
-    return {"id": str(result.inserted_id), "name": name}
+def add_user(user_dict: dict):
+
+    if db["users"].find_one({"name": user_dict["name"]}):
+        return {"error": "User already exists"}
+
+    result = db["users"].insert_one({user_dict})
+    return {"id": str(result.inserted_id), "name": user_dict["name"]}
 
 @app.get("/get_user")                                       # Benutzer abrufen
 def get_user(name: str):
