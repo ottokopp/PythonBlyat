@@ -7,7 +7,13 @@ def test_health():
     response = requests.get(f"http://{ip_adress}:{port}/health")
     print(response.json())
 
-    
+def add_user(user_dict):
+    response = requests.post(f"http://{ip_adress}:{port}/add_user", json=user_dict)
+    print(response.json())
+
+def get_user(name):
+    response = requests.get(f"http://{ip_adress}:{port}/get_user", params={"name": name})
+    print(response.json())
 
 if __name__ == "__main__":
-    test_health()
+    get_user("testtest")
