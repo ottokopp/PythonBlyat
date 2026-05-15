@@ -9,7 +9,7 @@ app = FastAPI()
 for doc in collection.find():                               # Alle Dokumente abrufen
     print(doc)
 
-@app.get("/health")                                               # Root-Endpoint
+@app.get("/health")                                         # Root-Endpoint
 def root():
     return {"message": "API läuft"}
 
