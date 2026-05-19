@@ -32,9 +32,47 @@ from fsrs import Scheduler, Card as FSRSCard, Rating, ReviewLog
 from datetime import datetime, timezone  
 import time
 from abc import ABC, abstractmethod
+from server_utils.db_helper import DBHelper
 
+class App():
+    def __init__(self, reviewer, db_helper):
+        self.current_user = None
+        self.current_session = None
+        self.reviewer = reviewer
+        self.db_helper = db_helper
 
-class CustomCard(FSRSCard):
+    def register_user(self, username):
+        if self.db_helper.test_health().status_code == 200:
+            print(str(self.db_helper.test_health()) + "Verbing war erfolgreich")
+            new_user = User(username,email="afdkjdfsal@.de")
+            response = self.db_helper.add_user(new_user.to_dict())
+            print(response.json())
+        else:
+            print(self.db_helper.test_health(), "Verbingung zum server fehlgeschlagen")
+
+    def login(self, username):
+        response = self.db_helper.get_user(username)
+        if response.status_code == 200:
+            print(response.json())
+            self.current_user = User.from_dict(response.json())
+
+    def assign_cards_to_current_user(self):
+        #TODO
+        pass
+
+class DBObject():
+    #TODO: übergerodnete Parent-Klasse für alle Datenoibjeteke (User,Card, Session). ObjektID von MongoDB muss geändert werden genauso Datetimeklasse. Rekursion
+    def __init__(self):
+        self._id = None
+
+    def _to_dict(self):
+        pass
+
+    @classmethod
+    def _from_dict(cls, dict_data):
+        pass
+
+class CustomCard(DBObject, FSRSCard):
 
     #TODO self.override_review_params ={"review_time", ... "} zusätzlicher Parameter für Zeit bei Karten
 
@@ -53,19 +91,16 @@ class CustomCard(FSRSCard):
         #wichtig bei MulitpleChosie Card wegen Optionen
         pass
 
+
     def to_dict(self):
         return {
-            'question': self.question,
-            'answer': self.answer,
-            'card_type': self.__class__.__name__,
-            'due': self.due,
-            'stability': self.stability,
-            'difficulty': self.difficulty,
-            #reps ist wie oft habe ich die Karte wiederholt und lapses wie oft vergessen. Beide fangen bei 0 an zu zählen.
-            'reps': self.reps if hasattr(self, 'reps') else 0,
-            'lapses': self.lapses if hasattr(self, 'lapses') else 0,
-            'state': self.state,
-            'last_review': self.last_review.isoformat() if self.last_review else None #Isoformat macht aus date String, weil sonst cancer
+            "username": self.username,
+            "email": self.useremail,
+            "created_at": self.created_at.isoformat(),
+            "assigned_cards": [card.to_dict() for card in self.assigned_cards],
+            "stats": self.stats,
+            "total_reviews": self.total_reviews,
+            "correct_reviews": self.correct_reviews
         }
 
     #def from_dict():
@@ -117,18 +152,18 @@ class SimpleCard(CustomCard):
         return f"SimpleCard(question='{self.question}',answer='{self.answer}', stability={self.stability})" #ist stablity funktion aus fsrs
 
 
-class User:
-        
+class User(DBObject):
+    
     def __init__(self, username: str, email: str = None):
 
         #UserAtrributis
+        self._id = None #TODO: sollte auch in der Parent Klasse gehandelt werden
         self.username = username
         self.useremail = email
         self.created_at = datetime.now(timezone.utc)
 
         #später umschreiben in decks
-        self.cards = []
-        self.reviewer = Reviewer()  # Jeder User hat seinen eigenen Reviewer
+        self.assigned_cards = []
         self.stats = {"total": 0, "correct": 0}
 
         #Statistik für spätere Auswertungen
@@ -137,7 +172,7 @@ class User:
 
 
     def add_card(self, card):
-        self.cards.append(card)
+        self.assigned_cards.append(card)
 
     def remove_card(self, card):
         #TODO wenn es eine Add card gibt muss es wahrscheinlich auch eine remove card geben
@@ -148,19 +183,40 @@ class User:
     
     def get_due_cards(self):
         #gibt Stand jetzt alle Karten zurück
-        return self.cards
+        return self.assigned_cards
     
     def update_card(self, old_card, new_card):
-        for i, card in enumerate(self.cards):
+        for i, card in enumerate(self.assigned_cards):
             if card is old_card:
-                self.cards[i] = new_card
+                self.assigned_cards[i] = new_card
                 print("Card Update great Succseessss!")
                 return True
         return False
 
     
+    def to_dict(self):
+        return {
+            "username": self.username,
+            "email": self.useremail,
+            "created_at": self.created_at.isoformat(),
+            "assigned_cards": [card.to_dict() for card in self.assigned_cards],
+            "stats": self.stats,
+            "total_reviews": self.total_reviews,
+            "correct_reviews": self.correct_reviews
+        }
     
-class Session:
+    @classmethod
+    def from_dict(cls, user_dict):
+        user = cls(user_dict["username"], email=user_dict.get("email"))
+        user.created_at = datetime.fromisoformat(user_dict["created_at"])
+        user.assigned_cards = [card_dict for card_dict in user_dict.get("assigned_cards", [])]
+        user.stats = user_dict.get("stats", {"total": 0, "correct": 0})
+        user.total_reviews = user_dict.get("total_reviews", 0)
+        user.correct_reviews = user_dict.get("correct_reviews", 0)
+        return user
+    #TODO: from dict und to dict als generische Klasse umbauen
+    
+class Session(DBObject):
     #Session beginnt mit einloggen des Users.
     #Session endet mit beenden der App
     #history auswertung
@@ -226,38 +282,47 @@ class Reviewer:
 
         return reviewed_card, log
 
-reviewer = Reviewer()
-name = input("dein Name:")
-email = input("dein e-mail:")
-user = User(name, email)
-karte = SimpleCard("Größte Stadt Kasachstans", "Almaty")
-karte2 = MultipleChoiceCard("Nachnahme des Wer Wird Milionär Hosts:", "Lauch", ["Lauch", "Hitler", "Epstein", "Diddler"])
-karte3 = SimpleCard("Türkische Wort für das männliche Glied", "Yarak")
+if __name__ == "__main__":
+    reviewer = Reviewer()
+    dbhelper= DBHelper()
+    app = App(reviewer, dbhelper)
 
-user.add_card(karte)
-user.add_card(karte2)
-user.add_card(karte3)
-karten = user.get_due_cards()
+    app.register_user("Lord Ottrick")
+    app.login("Lord Ottrick")
 
-print(f"Hallo Lord {user.username}!")
+    print("currently logged in user", app.current_user.to_dict()["username"])
+    # reviewer = Reviewer()
+    # name = input("dein Name:")
+    # email = input("dein e-mail:")
+    # user = User(name, email)
+    # karte = SimpleCard("Größte Stadt Kasachstans", "Almaty")
+    # karte2 = MultipleChoiceCard("Nachnahme des Wer Wird Milionär Hosts:", "Lauch", ["Lauch", "Hitler", "Epstein", "Diddler"])
+    # karte3 = SimpleCard("Türkische Wort für das männliche Glied", "Yarak")
 
-for card in user.get_due_cards():
-    print(f"{card.question}")   
-    # multiple-Choice-fuck
-    if hasattr(card, 'options'):
-        for i, option in enumerate(card.options, 1):
-            print(f"  {i}. {option}")
-    
-    start_time = time.time()
-    user_answer = input("\nDeine Antwort: ")
-    antwortdauer = time.time() - start_time
+    # user.add_card(karte)
+    # user.add_card(karte2)
+    # user.add_card(karte3)
+    # karten = user.get_due_cards()
 
-    neue_karte, log = user.reviewer.review(card, user_answer, antwortdauer)
-    print(neue_karte)
-    print(f"Rating: {log.rating.name}")  
-    print(f"Nächster Review der Karte: {neue_karte.due}")
-    
-    user.update_card(card, neue_karte)
+    # print(f"Hallo Lord {user.username}!")
+
+    # for card in user.get_due_cards():
+    #     print(f"{card.question}")   
+    #     # multiple-Choice-fuck
+    #     if hasattr(card, 'options'):
+    #         for i, option in enumerate(card.options, 1):
+    #             print(f"  {i}. {option}")
+        
+    #     start_time = time.time()
+    #     user_answer = input("\nDeine Antwort: ")
+    #     antwortdauer = time.time() - start_time
+
+    #     neue_karte, log = user.reviewer.review(card, user_answer, antwortdauer)
+    #     print(neue_karte)
+    #     print(f"Rating: {log.rating.name}")  
+    #     print(f"Nächster Review der Karte: {neue_karte.due}")
+        
+    #     user.update_card(card, neue_karte)
 
 """ start_time = time.time()
 print(f"FRAGE: {karte.question}")
