@@ -29,7 +29,6 @@ Reset-artiges Verhalten                                 je schwerer (D hoch) →
 
 '''
 from fsrs import Scheduler, Card as FSRSCard, Rating, ReviewLog
-print("Import erfolgreich!")
 from datetime import datetime, timezone  
 import time
 from abc import ABC, abstractmethod
