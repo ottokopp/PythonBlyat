@@ -65,8 +65,29 @@ class DBObject():
     def __init__(self):
         self._id = None
 
-    def _to_dict(self):
-        pass
+    def to_dict(self):
+
+        result ={}
+  
+        #brauch den fick weil strings keine isoformatfunktion haben und Python doch nicht so save ist wie alle FIkcer sagen
+        for key, value in self.__dict__.items():
+            if isinstance(value, datetime):
+                result[key] = value.isoformat()
+            elif isinstance(value, list):
+                result[key] = []
+                for item in value:
+                    # Zuerst auf datetime prüfen!
+                    if isinstance(item, datetime):
+                        result[key].append(item.isoformat())
+                    # Dann auf DBObject prüfen
+                    elif isinstance(item, DBObject):
+                        result[key].append(item.to_dict())
+                    else:
+                        result[key].append(item)
+            else:
+                result[key] = value
+    
+        return result
 
     @classmethod
     def _from_dict(cls, dict_data):
@@ -92,16 +113,16 @@ class CustomCard(DBObject, FSRSCard):
         pass
 
 
-    def to_dict(self):
-        return {
-            "username": self.username,
-            "email": self.useremail,
-            "created_at": self.created_at.isoformat(),
-            "assigned_cards": [card.to_dict() for card in self.assigned_cards],
-            "stats": self.stats,
-            "total_reviews": self.total_reviews,
-            "correct_reviews": self.correct_reviews
-        }
+    # def to_dict(self):
+    #     return {
+    #         "username": self.username,
+    #         "email": self.useremail,
+    #         "created_at": self.created_at.isoformat(),
+    #         "assigned_cards": [card.to_dict() for card in self.assigned_cards],
+    #         "stats": self.stats,
+    #         "total_reviews": self.total_reviews,
+    #         "correct_reviews": self.correct_reviews
+    #     }
 
     #def from_dict():
     
@@ -284,13 +305,37 @@ class Reviewer:
 
 if __name__ == "__main__":
     reviewer = Reviewer()
-    dbhelper= DBHelper()
+    dbhelper = DBHelper()
     app = App(reviewer, dbhelper)
 
     app.register_user("Lord Ottrick")
     app.login("Lord Ottrick")
 
     print("currently logged in user", app.current_user.to_dict()["username"])
+
+    # Test für DBObject.to_dict()
+    user = User("Otto", "otto@email.com")  # Nur eine User-Erstellung
+    
+    # Erstelle Karten
+    karte1 = SimpleCard("Was ist 2+2?", "4")
+    karte2 = SimpleCard("Hauptstadt von Deutschland?", "Berlin")
+    
+    # Füge Karten zum User hinzu
+    user.assigned_cards.append(karte1)
+    user.assigned_cards.append(karte2)
+    
+    # Konvertiere zu Dictionary
+    ergebnis = user.to_dict()
+    
+    print("\n--- Test von DBObject.to_dict() ---")
+    print("Username:", ergebnis["username"])
+    print("Email:", ergebnis["email"])
+    print("Anzahl Karten:", len(ergebnis["assigned_cards"]))
+    print("\nErste Karte:")
+    print("  Frage:", ergebnis["assigned_cards"][0]["question"])
+    print("  Antwort:", ergebnis["assigned_cards"][0]["answer"])
+    print("\nTyp der ersten Karte:", type(ergebnis["assigned_cards"][0]))
+    
     # reviewer = Reviewer()
     # name = input("dein Name:")
     # email = input("dein e-mail:")
