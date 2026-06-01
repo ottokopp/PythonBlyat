@@ -2334,13 +2334,11 @@ class _MainPageHostState extends fw.State<MainPageHost> {
 
 	Future<void> _playOneShotAsset(String assetPath, {double volume = 1.0}) async {
 		final AudioPlayer sfxPlayer = AudioPlayer();
-		late final StreamSubscription<void> doneSub;
 		try {
 			await sfxPlayer.setReleaseMode(ReleaseMode.stop);
-			doneSub = sfxPlayer.onPlayerComplete.listen((_) async {
-				await doneSub.cancel();
-				await sfxPlayer.dispose();
-			});
+			unawaited(sfxPlayer.onPlayerComplete.first.then((_) {
+				return sfxPlayer.dispose();
+			}));
 			await sfxPlayer.play(AssetSource(assetPath), volume: volume);
 		} catch (_) {
 			await sfxPlayer.dispose();
@@ -2412,6 +2410,19 @@ class _MainPageHostState extends fw.State<MainPageHost> {
 		if (level == null || world == null) {
 			return const <Card>[];
 		}
+
+		if (_isBossLevel(world, level)) {
+			final List<Card> bossPool = _questionCards
+				.where(
+					(Card card) =>
+						_cardWorldNumber(card) == world &&
+						_cardLevelNumber(card) < level,
+				)
+				.toList();
+			bossPool.shuffle(math.Random());
+			return bossPool;
+		}
+
 		return _questionCards
 			.where(
 				(Card card) =>

@@ -12,7 +12,6 @@
 1.1.3 @Cloze;Mit welchem Zeichen legt man einen Wert für eine Variable fest? Beispiel: alter ___ 17.;
 |=|@
 
-
 1.2 Addiere deine ersten Variablen
 
 1.2.1 @Cloze;Um zwei Variablen zu addieren, verwendet man den Operator ___. Beispiel: alter_a ___ alter_b.;|+|+|@
