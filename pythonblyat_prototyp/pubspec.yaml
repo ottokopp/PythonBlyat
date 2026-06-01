@@ -30,6 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  audioplayers: ^6.4.0
+  code_text_field: ^1.1.0
+  highlight: ^0.7.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -56,6 +59,19 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/fragen_welt.txt
+    - assets/world1_map.txt
+    - assets/world2_map.txt
+    - assets/world3_map.txt
+    - assets/Sprite_Goblin.png
+    - assets/Sprite_VampireLord.png
+    - assets/world1.mp3
+    - assets/world1_boss.wav
+    - assets/correct_jingle.wav
+    - assets/false_sound.wav
+    - assets/level_win_sound.wav
 
   # To add assets to your application, add an assets section, like this:
   # assets:
