@@ -176,18 +176,17 @@ class SimpleCard(CustomCard):
 class User(DBObject):
     
     def __init__(self, username: str, email: str = None):
-
-        #UserAtrributis
-        self._id = None #TODO: sollte auch in der Parent Klasse gehandelt werden
+        # User Attribute
+        self._id = None
         self.username = username
-        self.useremail = email
+        self.email = email  # ← geändert von useremail zu email
         self.created_at = datetime.now(timezone.utc)
 
-        #später umschreiben in decks
+        # später umschreiben in decks
         self.assigned_cards = []
         self.stats = {"total": 0, "correct": 0}
 
-        #Statistik für spätere Auswertungen
+        # Statistik für spätere Auswertungen
         self.total_reviews = 0
         self.correct_reviews = 0
 
