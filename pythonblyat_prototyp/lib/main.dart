@@ -585,24 +585,24 @@ class WorldPage extends Page {
 								child: showBossWindow
 									? BossWindow(
 										worldNumber: selectedWorld.worldNumber,
-										levelNumber: activeLearnLevel!,
+										levelNumber: activeLearnLevel,
 										cards: learnWindowCards,
 										loading: learnCardsLoading,
 										onClose: onCloseLearnWindow,
 										onLevelCompleted: () => onLearnLevelCompleted(
-											activeLearnLevel!,
+											activeLearnLevel,
 										),
 										onAnswerCorrect: onAnswerCorrect,
 										onAnswerWrong: onAnswerWrong,
 									)
 									: LearnWindow(
 										worldNumber: selectedWorld.worldNumber,
-										levelNumber: activeLearnLevel!,
+										levelNumber: activeLearnLevel,
 										cards: learnWindowCards,
 										loading: learnCardsLoading,
 										onClose: onCloseLearnWindow,
 										onLevelCompleted: () => onLearnLevelCompleted(
-											activeLearnLevel!,
+											activeLearnLevel,
 										),
 										onAnswerCorrect: onAnswerCorrect,
 										onAnswerWrong: onAnswerWrong,
@@ -1886,7 +1886,7 @@ class _PageShell extends fw.StatelessWidget {
 										child: const m.Text('Back'),
 									),
 									const m.Spacer(),
-									if (rightAction != null) rightAction!,
+									?rightAction,
 								],
 							),
 							const m.SizedBox(height: 12),
@@ -2065,7 +2065,7 @@ class WorldGrid extends fw.StatelessWidget {
 											),
 										);
 									})
-									.toList(),
+									,
 							],
 						),
 					),
@@ -2677,7 +2677,7 @@ class _MainPageHostState extends fw.State<MainPageHost> {
 			debugShowCheckedModeBanner: false,
 			home: fw.KeyedSubtree(
 				key: fw.ValueKey<String>(
-					'${_history.length}:${_selectedWorldIndex}:$_worldLayoutRevision',
+					'${_history.length}:$_selectedWorldIndex:$_worldLayoutRevision',
 				),
 				child: _activePage,
 			),
