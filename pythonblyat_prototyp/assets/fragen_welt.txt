@@ -1,0 +1,292 @@
+# 1 Variablen Typen Einstieg
+
+1.1 Schreibe deine erste Variable
+
+1.1.1 @Multiple;Welche der folgenden Variablen enthält eine Variable vom Typ int?;
+|Alter=17|IstStudent=True|Name="Adam"|Hobbies=["Lesen","Golfen","Coden"]@
+
+1.1.2 @Code;Schreibe die Variable "monate" und setze sie gleich 12;
+|monate =|
+|monate=12|@
+
+1.1.3 @Cloze;Mit welchem Zeichen legt man einen Wert für eine Variable fest? Beispiel: alter ___ 17.;
+|=|@
+
+1.2 Addiere deine ersten Variablen
+
+1.2.1 @Cloze;Um zwei Variablen zu addieren, verwendet man den Operator ___. Beispiel: alter_a ___ alter_b.;|+|+|@
+
+1.2.2 @Code;Adam ist 17 Jahre alt. Bianca ist 21 Jahre alt. Wie alt sind Adam und Bianca zusammen? Nutze nur die gegebenen Variablen!;
+|alter_a = 17\nalter_b = 21\n#Dein Code hier#|
+|alter_a+alter_b|@
+
+1.3 Schreibe deinen ersten String
+
+1.3.1 @Multiple;Welche der folgenden Variablen ist ein String?;|name="Adam"|alter=17|student=True|punkte=9.5@
+
+1.3.2 @Code;Erstelle die Variable "stadt" und speichere den Text "Berlin" darin.;
+|stadt =|
+|stadt="Berlin"|@
+
+1.3.3 @Multiple;Welcher Datentyp speichert Text?;
+|String|int|float|bool|@
+
+
+1.4 String concatenation
+
+1.4.1 @Multiple;Welcher Operator wird verwendet, um zwei Strings zu verbinden?;|+|-|*|/@
+
+1.4.2 @Code;Verbinde die Variablen vorname und nachname zu einem vollständigen Namen.;
+|vorname="Adam"\nnachname="Müller"\n# Dein Code hier |
+|vorname+nachname|@
+
+1.5 print()
+
+1.5.1 @Multiple;Welche Funktion gibt Werte auf der Konsole aus?;
+|print()|input()|len()|type()|@
+
+1.5.2 @Multiple;Welche der folgenden Eingaben erlaubt print() und erzeugt so eine Terminal-Ausgabe?;
+|Alle 3 sind möglich.|string|int|Variablen|@
+
+1.5.3 @Code;Gib den Text "Hallo Welt" aus.;
+|# Dein Code hier|
+|print("Hallo Welt")|@
+
+
+1.6 Float
+
+1.6.1 @Multiple;Welche Variable enthält einen Float?;
+|preis=9.99|alter=17|student=True|name="Adam"|@
+
+1.6.2 @Code;Erstelle die Variable "temperatur" mit dem Wert 21.5.;|# Dein Code hier|temperatur=21.5|@
+
+1.6.1 @Multiple;Was passiert wenn einen int mit einer nicht teilbaren Zahl teilst, z.b. 8/5=?;
+|es wird automatisch zu einem float|es wird gerundet|ein Fehler wird geworfen|nichts davon|@
+
+
+1.7 Type Casting
+
+1.7.1 @Multiple;Welche Funktion wandelt einen Wert in einen String um?;
+|str()|int()|float()|type()|@
+
+1.7.1 @Code;Wandle die Variable alter in einen String um.;
+|alter=17\nalter_string = # Dein Code hier|
+|str(alter)|@
+
+1.7.3 @Cloze;Mit ___() wandelt man einen Wert in einen int um.;|int|@
+
+1.7.4 @Code;Wandle den String zahl in eine Zahl um.;
+|zahl="42"\n# Dein Code hier|
+|int(zahl)|@
+
+# 2 Variablen Typen Fortgeschritten
+
+2.1 String formatting
+
+2.1.1 @Code;Erstelle einen String mit dem Namen aus der Variable name mittels f-String.;|name="Adam"\n# Dein Code hier|f"Hallo {name}"|@
+
+2.1.2 @Multiple;Welches Zeichen steht vor einem f-String?;|f|s|x|#@
+
+2.1.3 @Cloze;Ein f-String beginnt mit dem Buchstaben ___.;|f|@
+
+2.1.4 @Code;Erstelle den Text "Ich bin 17 Jahre alt" mit der Variable alter.;|alter=17\n# Dein Code hier|f"Ich bin {alter} Jahre alt"|@
+
+2.1.5 @Code;Nutze String Formatting für name und alter.;|name="Adam"\nalter=17\n# Dein Code hier|f"{name} ist {alter} Jahre alt"|@
+
+2.1.6 @Cloze;Gegeben ist name="Adam". Der Ausdruck f"Hallo ___" gibt den Text "Hallo ___" aus.;|{name}|Adam|@
+
+
+2.2 Raw Strings
+
+2.2.1 @Multiple;Welches Präfix wird für Raw Strings verwendet?;|r|f|b|s@
+
+2.2.2 @Code;Erstelle einen Raw String mit dem Pfad C:\Users\Adam.;|# Dein Code hier|r"C:\Users\Adam"|@
+
+2.2.3 @Cloze;Ein Raw String beginnt mit dem Präfix ___.;|r|@
+
+2.2.4 @Multiple;Warum verwendet man Raw Strings?;|Damit Backslashes nicht speziell behandelt werden|Damit Zahlen gespeichert werden|Damit Listen erstellt werden|Damit Strings kürzer werden@
+
+2.2.5 @Code;Erstelle einen Raw String mit dem Text C:\Python\Kurs.;|# Dein Code hier|r"C:\Python\Kurs"|@
+
+2.2.6 @Cloze;Raw Strings sind nützlich für ___. Beispiel: ___"C:\Python".;|Dateipfade|r|@
+
+
+2.3 List
+
+2.3.1 @Multiple;Welche Variable ist eine Liste?;|hobbies=["Lesen","Golfen"]|name="Adam"|alter=17|student=True@
+
+2.3.2 @Code;Erstelle eine Liste mit den Zahlen 1, 2 und 3.;|# Dein Code hier|[1,2,3]|@
+
+2.3.3 @Cloze;Listen werden mit ___ Klammern erstellt.;|eckigen|@
+
+2.3.4 @Code;Erstelle die Variable farben mit den Werten Rot, Blau und Grün.;|# Dein Code hier|farben=["Rot","Blau","Grün"]|@
+
+2.3.5 @Multiple;Mit welchen Klammern wird eine Liste erstellt?;|[]|()|{}|<>@
+
+2.3.6 @Cloze;Die Liste [1,2,3] enthält ___ Elemente. Das erste Element ist ___.;|3|1|@
+
+
+2.4 List slicing
+
+2.4.1 @Code;Hole das erste Element der Liste.;|zahlen=[10,20,30]\n# Dein Code hier|zahlen[0]|@
+
+2.4.2 @Code;Hole die ersten zwei Elemente der Liste.;|zahlen=[10,20,30,40]\n# Dein Code hier|zahlen[:2]|@
+
+2.4.3 @Cloze;Der erste Index einer Liste ist ___.;|0|@
+
+2.4.4 @Multiple;Welchen Index hat das erste Element einer Liste?;|0|1|-1|2@
+
+2.4.5 @Code;Hole das letzte Element der Liste.;|zahlen=[10,20,30]\n# Dein Code hier|zahlen[-1]|@
+
+2.4.6 @Cloze;Gegeben: zahlen=[10,20,30]. zahlen[___] ergibt ___.;|1|20|@
+
+
+2.5 String slicing
+
+2.5.1 @Code;Hole den ersten Buchstaben des Strings.;|wort="Python"\n# Dein Code hier|wort[0]|@
+
+2.5.2 @Code;Hole die ersten drei Buchstaben des Strings.;|wort="Python"\n# Dein Code hier|wort[:3]|@
+
+2.5.3 @Cloze;Der erste Buchstabe von "Python" ist ___.;|P|@
+
+2.5.4 @Multiple;Welchen Wert liefert "Python"[0]?;|P|y|t|Python@
+
+2.5.5 @Code;Hole den letzten Buchstaben des Strings.;|wort="Python"\n# Dein Code hier|wort[-1]|@
+
+2.5.6 @Cloze;Der Ausdruck wort[___] liefert den ersten Buchstaben. Der Ausdruck wort[___] den letzten.;|0|-1|@
+
+
+2.6 Dict
+
+2.6.1 @Multiple;Welche Variable ist ein Dictionary?;|person={"name":"Adam","alter":17}|["Adam",17]|("Adam",17)|"Adam"@
+
+2.6.2 @Code;Erstelle ein Dictionary mit name="Adam".;|# Dein Code hier|{"name":"Adam"}|@
+
+2.6.3 @Cloze;Ein Dictionary wird mit ___ Klammern erstellt.;|geschweiften|@
+
+2.6.4 @Code;Erstelle ein Dictionary mit den Schlüsseln name und alter.;|# Dein Code hier|{"name":"Adam","alter":17}|@
+
+2.6.5 @Multiple;Mit welchen Klammern wird ein Dictionary erstellt?;|{}|[]|()|<>@
+
+2.6.6 @Cloze;Im Dictionary {"name":"Adam"} ist "name" der ___ und "Adam" der ___.;|Key|Wert|@
+
+
+2.7 Dict keys
+
+2.7.1 @Code;Hole den Wert zum Schlüssel "name".;|person={"name":"Adam","alter":17}\n# Dein Code hier|person["name"]|@
+
+2.7.2 @Multiple;Wie greift man auf einen Dictionary-Wert zu?;|person["name"]|person.name|person(0)|person[0]@
+
+2.7.3 @Cloze;Auf den Wert eines Dictionarys greift man über den ___ zu.;|Key|@
+
+2.7.4 @Code;Hole den Wert zum Schlüssel "alter".;|person={"name":"Adam","alter":17}\n# Dein Code hier|person["alter"]|@
+
+2.7.5 @Multiple;Was ist ein Key in einem Dictionary?;|Der Name eines Eintrags|Der Wert eines Eintrags|Eine Liste|Ein Index@
+
+2.7.6 @Cloze;Gegeben: person={"name":"Adam","alter":17}. person["___"] ergibt ___.;|alter|17|@
+
+# 3 Code Pathing (Loops, If-Branches)
+
+3.1 If Statement
+
+3.1.1 @Code;Prüfe, ob alter größer als 18 ist.;|alter=20\n# Dein Code hier|if alter > 18:|@
+
+3.1.2 @Multiple;Welches Schlüsselwort startet eine Bedingung?;|if|for|while|print@
+
+3.1.3 @Cloze;Eine Bedingung wird mit dem Schlüsselwort ___ eingeleitet.;|if|@
+
+3.1.4 @Code;Prüfe, ob zahl gleich 10 ist.;|zahl=10\n# Dein Code hier|if zahl == 10:|@
+
+3.1.5 @Code;Prüfe, ob student True ist.;|student=True\n# Dein Code hier|if student:|@
+
+3.1.6 @Cloze;Der Ausdruck if alter ___ 18: prüft, ob alter größer als 18 ist.;|>|@
+
+
+3.2 If Else Elif
+
+3.2.1 @Multiple;Welches Schlüsselwort wird verwendet, wenn die erste Bedingung nicht zutrifft?;|else|for|while|pass@
+
+3.2.2 @Multiple;Welches Schlüsselwort prüft eine weitere Bedingung?;|elif|loop|continue|next@
+
+3.2.3 @Cloze;Wenn keine vorherige Bedingung zutrifft, wird ___ verwendet.;|else|@
+
+3.2.4 @Code;Ergänze die zweite Bedingung.;|note=2\nif note == 1:\n    print("Sehr gut")\n# Dein Code hier|elif note == 2:|@
+
+3.2.5 @Code;Füge einen else-Zweig hinzu.;|alter=15\nif alter >= 18:\n    print("Erwachsen")\n# Dein Code hier|else:|@
+
+3.2.6 @Cloze;Mit ___ prüft man eine weitere Bedingung. Mit ___ behandelt man alle übrigen Fälle.;|elif|else|@
+
+
+3.3 For-Loop
+
+3.3.1 @Code;Schreibe eine For-Schleife über die Liste namen.;|namen=["Adam","Bianca"]\n# Dein Code hier|for name in namen:|@
+
+3.3.2 @Multiple;Welche Schleife wird verwendet, um über eine Liste zu iterieren?;|for|if|print|def@
+
+3.3.3 @Cloze;Eine For-Schleife durchläuft die Elemente einer ___.;|Liste|@
+
+3.3.4 @Code;Iteriere über die Zahlen-Liste.;|zahlen=[1,2,3]\n# Dein Code hier|for zahl in zahlen:|@
+
+3.3.5 @Code;Gib jedes Element der Liste aus.;|namen=["Adam","Bianca"]\n# Dein Code hier|for name in namen:\n    print(name)|@
+
+3.3.6 @Cloze;for name ___ namen: durchläuft alle Elemente der Variable ___.;|in|namen|@
+
+
+3.4 While Loop
+
+3.4.1 @Multiple;Welches Schlüsselwort startet eine While-Schleife?;|while|for|if|loop@
+
+3.4.2 @Code;Schreibe eine While-Schleife solange x kleiner als 5 ist.;|x=0\n# Dein Code hier|while x < 5:|@
+
+3.4.3 @Cloze;Eine While-Schleife läuft, solange die ___ wahr ist.;|Bedingung|@
+
+3.4.4 @Code;Ergänze die Bedingung.;|zahl=1\n# Dein Code hier|while zahl <= 10:|@
+
+3.4.5 @Multiple;Wann endet eine While-Schleife?;|Wenn die Bedingung False wird|Nach einem Durchlauf|Nach 10 Durchläufen|Nie@
+
+3.4.6 @Cloze;while x ___ 5: läuft weiter, solange x kleiner als ___ ist.;|<|5|@
+
+
+3.5 pass/continue/break
+
+3.5.1 @Multiple;Welches Schlüsselwort beendet eine Schleife sofort?;|break|pass|continue|stop@
+
+3.5.2 @Multiple;Welches Schlüsselwort überspringt den aktuellen Durchlauf?;|continue|break|pass|return@
+
+3.5.3 @Cloze;Mit ___ beendet man eine Schleife sofort.;|break|@
+
+3.5.4 @Multiple;Welches Schlüsselwort macht vorerst nichts?;|pass|break|continue|skip@
+
+3.5.5 @Code;Beende die Schleife, wenn zahl gleich 5 ist.;|for zahl in range(10):\n    # Dein Code hier|if zahl == 5:\n    break|@
+
+3.5.6 @Cloze;___ überspringt einen Durchlauf, während ___ die Schleife beendet.;|continue|break|@
+
+
+3.6 range
+
+3.6.1 @Code;Erzeuge die Zahlen von 0 bis 4.;|# Dein Code hier|range(5)|@
+
+3.6.2 @Multiple;Was liefert range(3)?;|0,1,2|1,2,3|0,1,2,3|3@
+
+3.6.3 @Cloze;range(5) erzeugt die Zahlen von ___ bis ___.;|0|4|@
+
+3.6.4 @Code;Erzeuge die Zahlen von 1 bis 5.;|# Dein Code hier|range(1,6)|@
+
+3.6.5 @Code;Nutze range in einer For-Schleife.;|# Dein Code hier|for i in range(5):|@
+
+3.6.6 @Cloze;range(1,6) beginnt bei ___ und endet vor ___.;|1|6|@
+
+
+3.7 enumerate
+
+3.7.1 @Multiple;Wofür wird enumerate() verwendet?;|Um Index und Wert gleichzeitig zu erhalten|Um Listen zu sortieren|Um Strings zu verbinden|Um Variablen zu erstellen@
+
+3.7.2 @Cloze;enumerate() liefert gleichzeitig ___ und ___ eines Elements.;|Index|Wert|@
+
+3.7.3 @Code;Nutze enumerate für die Liste namen.;|namen=["Adam","Bianca"]\n# Dein Code hier|enumerate(namen)|@
+
+3.7.4 @Code;Schreibe eine For-Schleife mit enumerate.;|namen=["Adam","Bianca"]\n# Dein Code hier|for index, name in enumerate(namen):|@
+
+3.7.5 @Cloze;for index, name in ___(namen): verwendet die Funktion ___.;|enumerate|enumerate|@
+
+3.7.6 @Multiple;Welchen Index hat das erste Element bei enumerate standardmäßig?;|0|1|-1|2|@
