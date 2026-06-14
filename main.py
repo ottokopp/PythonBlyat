@@ -32,7 +32,7 @@ from fsrs import Scheduler, Card as FSRSCard, Rating, ReviewLog
 from datetime import datetime, timezone  
 import time
 from abc import ABC, abstractmethod
-from server_utils.db_helper import DBHelper
+#from server_utils.db_helper import DBHelper
 
 class App():
     def __init__(self, reviewer, db_helper):
@@ -174,7 +174,11 @@ class SimpleCard(CustomCard):
 
 
 class User(DBObject):
-    
+    '''Aufgaben:
+        Karten besitzen (assigned_cards)
+        Statistiken haben (total_reviews, correct_reviews)
+        Session-History haben (Liste alter Sessions)'''
+
     def __init__(self, username: str, email: str = None):
         # User Attribute
         self._id = None
@@ -237,9 +241,10 @@ class User(DBObject):
     #TODO: from dict und to dict als generische Klasse umbauen
     
 class Session(DBObject):
-    #Session beginnt mit einloggen des Users.
-    #Session endet mit beenden der App
-    #history auswertung
+    '''Aufgaben:
+        Startzeit und Endzeit wissen
+        Welche Karten reviewed wurden
+        Welche ReviewLogs dazugehören'''
     #stackausertung, volume change, öffnet settings
     #"im Besten mit abstrackten klassen arbeiten"
     def __init__(self, username: str):
@@ -273,8 +278,6 @@ class Session(DBObject):
 class Reviewer:
     def __init__(self):
         self.scheduler = Scheduler()
-        self.review_history = []
-        self.total_reviews = 0 
     
     def time_dependent_rating(self, answer_time_seconds):
         if answer_time_seconds <= 5:
@@ -296,15 +299,13 @@ class Reviewer:
 
         reviewed_card, log = self.scheduler.review_card(card, rating, now)
 
-        #history log
-        self.review_history.append(log)
-        self.total_reviews += 1
-
         return reviewed_card, log
 
 if __name__ == "__main__":
+    r = Reviewer()
+    print(r.__dict__)
     reviewer = Reviewer()
-    dbhelper = DBHelper()
+    #dbhelper = DBHelper()
     app = App(reviewer, dbhelper)
 
     app.register_user("Lord Ottrick")
