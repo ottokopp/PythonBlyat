@@ -32,7 +32,7 @@ from fsrs import Scheduler, Card as FSRSCard, Rating, ReviewLog
 from datetime import datetime, timezone  
 import time
 from abc import ABC, abstractmethod
-#from server_utils.db_helper import DBHelper
+from server_utils.db_helper import DBHelper
 
 class App():
     def __init__(self, reviewer, db_helper):
