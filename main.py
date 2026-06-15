@@ -91,7 +91,21 @@ class DBObject():
 
     @classmethod
     def _from_dict(cls, dict_data):
-        pass
+        # von welcher Klasse (cls) soll ich überhaupt ein Objekt erstellen?
+        # Ansonsten kannst du mal einfach mit if branches die Klasse entscheiden.
+        if cls == User:
+            user = cls(dict_data["username"], email=dict_data.get("email"))
+            user.created_at = datetime.fromisoformat(dict_data["created_at"])
+            user.assigned_cards = [card_dict for card_dict in dict_data.get("assigned_cards", [])]
+            user.stats = dict_data.get("stats", {"total": 0, "correct": 0})
+            user.total_reviews = dict_data.get("total_reviews", 0)
+            user.correct_reviews = dict_data.get("correct_reviews", 0)
+            return user
+        if cls == Card:
+            pass # TODO: usw.
+        if cls == Session:
+            pass # TODO: usw.
+        # ... usw. usw.
 
 class CustomCard(DBObject, FSRSCard):
 
