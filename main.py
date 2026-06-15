@@ -97,13 +97,13 @@ class CustomCard(DBObject, FSRSCard):
 
     #TODO self.override_review_params ={"review_time", ... "} zusätzlicher Parameter für Zeit bei Karten
 
-    def __init__(self, question, answer):
-        super().__init__() 
+    def __init__(self, question, answer, *args, **kwargs):
+        super().__init__(*args, **kwargs) 
         self.question = question
         self.answer = answer
 
     @abstractmethod
-    def check_answer(self, user_input: Any) -> bool:
+    def check_answer(self, user_input) -> bool:
         #Chek _answer muss mit Liste oder Int oder String gebaut werden
         pass
 
@@ -248,13 +248,13 @@ class Session(DBObject):
         self.start_time = datetime.now(timezone.utc)
         self.end_time = None
         self.is_active = True
-        self.cards_reviewed: List = []
+        self.cards_reviewed = []
         self.tasks_started: int = 0
         self.tasks_completed: int = 0
         
         
 
-    def start_session(user: User) -> Session:
+    def start_session(user: User):
         return Session(user)
 
     def start_task(self):
@@ -304,37 +304,39 @@ class Reviewer:
         return reviewed_card, log
 
 if __name__ == "__main__":
-    reviewer = Reviewer()
-    dbhelper = DBHelper()
-    app = App(reviewer, dbhelper)
+    test_card = FSRSCard()
+    print(dir(test_card))
+    # reviewer = Reviewer()
+    # dbhelper = DBHelper()
+    # app = App(reviewer, dbhelper)
 
-    app.register_user("Lord Ottrick")
-    app.login("Lord Ottrick")
+    # app.register_user("Lord Ottrick")
+    # app.login("Lord Ottrick")
 
-    print("currently logged in user", app.current_user.to_dict()["username"])
+    # print("currently logged in user", app.current_user.to_dict()["username"])
 
-    # Test für DBObject.to_dict()
-    user = User("Otto", "otto@email.com")  # Nur eine User-Erstellung
+    # # Test für DBObject.to_dict()
+    # user = User("Otto", "otto@email.com")  # Nur eine User-Erstellung
     
-    # Erstelle Karten
-    karte1 = SimpleCard("Was ist 2+2?", "4")
-    karte2 = SimpleCard("Hauptstadt von Deutschland?", "Berlin")
+    # # Erstelle Karten
+    # karte1 = SimpleCard("Was ist 2+2?", "4")
+    # karte2 = SimpleCard("Hauptstadt von Deutschland?", "Berlin")
     
-    # Füge Karten zum User hinzu
-    user.assigned_cards.append(karte1)
-    user.assigned_cards.append(karte2)
+    # # Füge Karten zum User hinzu
+    # user.assigned_cards.append(karte1)
+    # user.assigned_cards.append(karte2)
     
-    # Konvertiere zu Dictionary
-    ergebnis = user.to_dict()
+    # # Konvertiere zu Dictionary
+    # ergebnis = user.to_dict()
     
-    print("\n--- Test von DBObject.to_dict() ---")
-    print("Username:", ergebnis["username"])
-    print("Email:", ergebnis["email"])
-    print("Anzahl Karten:", len(ergebnis["assigned_cards"]))
-    print("\nErste Karte:")
-    print("  Frage:", ergebnis["assigned_cards"][0]["question"])
-    print("  Antwort:", ergebnis["assigned_cards"][0]["answer"])
-    print("\nTyp der ersten Karte:", type(ergebnis["assigned_cards"][0]))
+    # print("\n--- Test von DBObject.to_dict() ---")
+    # print("Username:", ergebnis["username"])
+    # print("Email:", ergebnis["email"])
+    # print("Anzahl Karten:", len(ergebnis["assigned_cards"]))
+    # print("\nErste Karte:")
+    # print("  Frage:", ergebnis["assigned_cards"][0]["question"])
+    # print("  Antwort:", ergebnis["assigned_cards"][0]["answer"])
+    # print("\nTyp der ersten Karte:", type(ergebnis["assigned_cards"][0]))
     
     # reviewer = Reviewer()
     # name = input("dein Name:")

@@ -9,3 +9,22 @@ Namen.
 Passwort
 Eckdaten.
 Wann wurde das Profil erstellt. 
+
+
+
+
+App
+-> User
+    -> Assigned Cards
+    -> Achievements
+
+-> Page
+    -> WorldMode (Lernpfad)
+        -> World (Lern"kapitel" etc.)
+            -> Node
+                -> Targets
+                -> Level
+                    -> Cards
+    -> LearnMode (FSRS Dings)
+    -> Menu
+    -> Login
