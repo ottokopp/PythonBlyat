@@ -61,7 +61,7 @@ class App():
         pass
 
 class DBObject():
-    #TODO: übergerodnete Parent-Klasse für alle Datenoibjeteke (User,Card, Session). ObjektID von MongoDB muss geändert werden genauso Datetimeklasse. Rekursion
+    
     def __init__(self):
         self._id = None
 
@@ -230,29 +230,6 @@ class User(DBObject):
                 print("Card Update great Succseessss!")
                 return True
         return False
-
-    
-    def to_dict(self):
-        return {
-            "username": self.username,
-            "email": self.useremail,
-            "created_at": self.created_at.isoformat(),
-            "assigned_cards": [card.to_dict() for card in self.assigned_cards],
-            "stats": self.stats,
-            "total_reviews": self.total_reviews,
-            "correct_reviews": self.correct_reviews
-        }
-    
-    @classmethod
-    def from_dict(cls, user_dict):
-        user = cls(user_dict["username"], email=user_dict.get("email"))
-        user.created_at = datetime.fromisoformat(user_dict["created_at"])
-        user.assigned_cards = [card_dict for card_dict in user_dict.get("assigned_cards", [])]
-        user.stats = user_dict.get("stats", {"total": 0, "correct": 0})
-        user.total_reviews = user_dict.get("total_reviews", 0)
-        user.correct_reviews = user_dict.get("correct_reviews", 0)
-        return user
-    #TODO: from dict und to dict als generische Klasse umbauen
     
 class Session(DBObject):
     '''Aufgaben:
@@ -261,19 +238,22 @@ class Session(DBObject):
         Welche ReviewLogs dazugehören'''
     #stackausertung, volume change, öffnet settings
     #"im Besten mit abstrackten klassen arbeiten"
-    def __init__(self, username: str):
-        self.username = username
+    def __init__(self, user: User):
+        super().__init__()
+        self.user = user
+        self.username = user.username
         self.start_time = datetime.now(timezone.utc)
         self.end_time = None
         self.is_active = True
         self.cards_reviewed = []
+        self.review_logs = []
         self.tasks_started: int = 0
         self.tasks_completed: int = 0
-        
-        
 
-    def start_session(user: User):
-        return Session(user)
+
+    @classmethod
+    def start_session(cls, user: User) -> 'Session':
+        return cls(user)
 
     def start_task(self):
         self.tasks_started += 1
@@ -283,11 +263,21 @@ class Session(DBObject):
         
     def add_card_reviewed(self, card):
         self.cards_reviewed.append(card)
+    
+    def add_review_log(self, log):
+        self.review_logs.append(log)
         
     def end_session(self):
-        self.when_exited = datetime.now(timezone.utc)
+        self.end_time = datetime.now(timezone.utc)
+        self.is_active = False
+    
+    def get_duration(self) -> float:
+        end = self.end_time if self.end_time else datetime.now(timezone.utc)
+        return (end - self.start_time).total_seconds()
+    
+    def get_success_rate(self) -> float:
+        return 0.0
 
-    #TODO sessiondauer und auswertung machen
 
 class Reviewer:
     def __init__(self):
@@ -316,11 +306,13 @@ class Reviewer:
         return reviewed_card, log
 
 if __name__ == "__main__":
-    r = Reviewer()
-    print(r.__dict__)
-    reviewer = Reviewer()
-    #dbhelper = DBHelper()
-    app = App(reviewer, dbhelper)
+    
+    user = User("Otto", "otto@email.com")
+    session = Session.start_session(user)
+    
+    print(f"Session für: {session.username}")
+    print(f"Review Logs: {session.review_logs}")  # → []
+    print(f"Erfolgsquote: {session.get_success_rate()}")  # → 0.0
 
     # app.register_user("Lord Ottrick")
     # app.login("Lord Ottrick")
