@@ -55,6 +55,8 @@ class App():
         if response.status_code == 200:
             print(response.json())
             self.current_user = User.from_dict(response.json())
+            self.current_session = Session.start_session(self.current_user)
+            print(f"Session gestartet für {self.current_user.username}")
 
     def logout(self):
         if self.current_session:
@@ -84,6 +86,7 @@ class DBObject():
     def to_dict(self):
 
         result ={}
+        result["__type__"] = self.__class__.__name__
   
         #brauch den fick weil strings keine isoformatfunktion haben und Python doch nicht so save ist wie alle FIkcer sagen
         for key, value in self.__dict__.items():
@@ -108,6 +111,7 @@ class DBObject():
     @classmethod
     def _from_dict(cls, dict_data):
         # von welcher Klasse (cls) soll ich überhaupt ein Objekt erstellen?
+        # data class decorater anschauen für from dict
         # Ansonsten kannst du mal einfach mit if branches die Klasse entscheiden.
         if cls == User:
             user = cls(dict_data["username"], email=dict_data.get("email"))
@@ -141,20 +145,6 @@ class CustomCard(DBObject, FSRSCard):
     def display_question(self) -> str:
         #wichtig bei MulitpleChosie Card wegen Optionen
         pass
-
-
-    # def to_dict(self):
-    #     return {
-    #         "username": self.username,
-    #         "email": self.useremail,
-    #         "created_at": self.created_at.isoformat(),
-    #         "assigned_cards": [card.to_dict() for card in self.assigned_cards],
-    #         "stats": self.stats,
-    #         "total_reviews": self.total_reviews,
-    #         "correct_reviews": self.correct_reviews
-    #     }
-
-    #def from_dict():
     
 class MultipleChoiceCard(CustomCard):
     def __init__(self, question, answer, options):
