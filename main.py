@@ -56,6 +56,22 @@ class App():
             print(response.json())
             self.current_user = User.from_dict(response.json())
 
+    def logout(self):
+        if self.current_session:
+            self.current_session.end_session("normal_logout")
+            print(f"Session beendet - Dauer: {self.current_session.duration:.1f} Sekunden")
+            print(f"Grund: {self.current_session.end_reason}")
+            self.current_session = None
+        self.current_user = None
+
+    def cleanup(self):
+        if self.current_session and self.current_session.is_active:
+            self.current_session.end_session("program_exit")
+            print(f"Session wurde wegen Programmende beendet")
+            print(f"Dauer: {self.current_session.duration:.1f} Sekunden")
+            self.current_session = None
+        self.current_user = None
+
     def assign_cards_to_current_user(self):
         #TODO
         pass
@@ -244,6 +260,8 @@ class Session(DBObject):
         self.username = user.username
         self.start_time = datetime.now(timezone.utc)
         self.end_time = None
+        self.end_reason = None
+        self.duration = None 
         self.is_active = True
         self.cards_reviewed = []
         self.review_logs = []
@@ -267,17 +285,24 @@ class Session(DBObject):
     def add_review_log(self, log):
         self.review_logs.append(log)
         
-    def end_session(self):
+    def end_session(self, reason: str = "normal_logout"):
         self.end_time = datetime.now(timezone.utc)
         self.is_active = False
+        self.end_reason = reason
+        self.duration = self.get_duration()
+        return self
     
     def get_duration(self) -> float:
         end = self.end_time if self.end_time else datetime.now(timezone.utc)
         return (end - self.start_time).total_seconds()
     
     def get_success_rate(self) -> float:
-        return 0.0
-
+        if not self.review_logs:
+            return 0.0
+        
+        good_reviews = sum(1 for log in self.review_logs 
+                        if log.rating in [Rating.Good, Rating.Easy])
+        return good_reviews / len(self.review_logs)
 
 class Reviewer:
     def __init__(self):
