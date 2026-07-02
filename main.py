@@ -114,18 +114,149 @@ class DBObject():
         # data class decorater anschauen für from dict
         # Ansonsten kannst du mal einfach mit if branches die Klasse entscheiden.
         if cls == User:
-            user = cls(dict_data["username"], email=dict_data.get("email"))
-            user.created_at = datetime.fromisoformat(dict_data["created_at"])
-            user.assigned_cards = [card_dict for card_dict in dict_data.get("assigned_cards", [])]
-            user.stats = dict_data.get("stats", {"total": 0, "correct": 0})
-            user.total_reviews = dict_data.get("total_reviews", 0)
-            user.correct_reviews = dict_data.get("correct_reviews", 0)
+        user = cls(dict_data["username"], email=dict_data.get("email"))
+        user._id = dict_data.get("_id")
+        user.created_at = datetime.fromisoformat(dict_data["created_at"])
+        user.stats = dict_data.get("stats", {"total": 0, "correct": 0})
+        user.total_reviews = dict_data.get("total_reviews", 0)
+        user.correct_reviews = dict_data.get("correct_reviews", 0)
+        
+
+        user.assigned_cards = []
+        for card_dict in dict_data.get("assigned_cards", []):
+            # Hole den Typ der Karte aus dem Dictionary
+            card_type = card_dict.get("__type__", "SimpleCard")
+            if card_type == "SimpleCard":
+                card = SimpleCard._from_dict(card_dict)
+            elif card_type == "MultipleChoiceCard":
+                card = MultipleChoiceCard._from_dict(card_dict)
+            elif card_type == "CodeCard":
+                card = CodeCard._from_dict(card_dict)
+            elif card_type == "ClozeCard":
+                card = ClozeCard._from_dict(card_dict)
+            else:
+                card = SimpleCard._from_dict(card_dict)  # Fallback
+            user.assigned_cards.append(card)
+        
             return user
-        if cls == Card:
-            pass # TODO: usw.
+    
+        if cls == SimpleCard:
+            card = cls(dict_data["question"], dict_data["answer"])
+            card._id = dict_data.get("_id")
+            
+            # FSRS Attribute wiederherstellen
+            if "due" in dict_data and dict_data["due"]:
+                card.due = datetime.fromisoformat(dict_data["due"])
+            if "stability" in dict_data:
+                card.stability = dict_data["stability"]
+            if "difficulty" in dict_data:
+                card.difficulty = dict_data["difficulty"]
+            if "reps" in dict_data:
+                card.reps = dict_data["reps"]
+            if "lapses" in dict_data:
+                card.lapses = dict_data["lapses"]
+            if "state" in dict_data:
+                card.state = dict_data["state"]
+            if "last_review" in dict_data and dict_data["last_review"]:
+                card.last_review = datetime.fromisoformat(dict_data["last_review"])
+            
+            return card
+        
+        # 3. MULTIPLE CHOICE CARD
+        if cls == MultipleChoiceCard:
+            card = cls(
+                dict_data["question"],
+                dict_data["answer"],
+                dict_data.get("options", [])
+            )
+            card._id = dict_data.get("_id")
+            
+            # FSRS Attribute wiederherstellen
+            if "due" in dict_data and dict_data["due"]:
+                card.due = datetime.fromisoformat(dict_data["due"])
+            if "stability" in dict_data:
+                card.stability = dict_data["stability"]
+            if "difficulty" in dict_data:
+                card.difficulty = dict_data["difficulty"]
+            if "reps" in dict_data:
+                card.reps = dict_data["reps"]
+            if "lapses" in dict_data:
+                card.lapses = dict_data["lapses"]
+            if "state" in dict_data:
+                card.state = dict_data["state"]
+            if "last_review" in dict_data and dict_data["last_review"]:
+                card.last_review = datetime.fromisoformat(dict_data["last_review"])
+            
+            return card
+        
+        # 4. CODE CARD
+        if cls == CodeCard:
+            card = cls(dict_data["question"], dict_data["answer"])
+            card._id = dict_data.get("_id")
+            
+            # FSRS Attribute wiederherstellen
+            if "due" in dict_data and dict_data["due"]:
+                card.due = datetime.fromisoformat(dict_data["due"])
+            if "stability" in dict_data:
+                card.stability = dict_data["stability"]
+            if "difficulty" in dict_data:
+                card.difficulty = dict_data["difficulty"]
+            if "reps" in dict_data:
+                card.reps = dict_data["reps"]
+            if "lapses" in dict_data:
+                card.lapses = dict_data["lapses"]
+            if "state" in dict_data:
+                card.state = dict_data["state"]
+            if "last_review" in dict_data and dict_data["last_review"]:
+                card.last_review = datetime.fromisoformat(dict_data["last_review"])
+            
+            return card
+        
+        # 5. CLOZE CARD
+        if cls == ClozeCard:
+            card = cls(dict_data["question"], dict_data["answer"])
+            card._id = dict_data.get("_id")
+            
+            # FSRS Attribute wiederherstellen
+            if "due" in dict_data and dict_data["due"]:
+                card.due = datetime.fromisoformat(dict_data["due"])
+            if "stability" in dict_data:
+                card.stability = dict_data["stability"]
+            if "difficulty" in dict_data:
+                card.difficulty = dict_data["difficulty"]
+            if "reps" in dict_data:
+                card.reps = dict_data["reps"]
+            if "lapses" in dict_data:
+                card.lapses = dict_data["lapses"]
+            if "state" in dict_data:
+                card.state = dict_data["state"]
+            if "last_review" in dict_data and dict_data["last_review"]:
+                card.last_review = datetime.fromisoformat(dict_data["last_review"])
+            
+            return card
+        
+        # 6. SESSION
         if cls == Session:
-            pass # TODO: usw.
-        # ... usw. usw.
+            # Session wird ohne User erstellt (User wird später gesetzt)
+            session = cls.__new__(cls)
+            session._id = dict_data.get("_id")
+            session.username = dict_data.get("username")
+            session.start_time = datetime.fromisoformat(dict_data["start_time"])
+            session.end_time = datetime.fromisoformat(dict_data["end_time"]) if dict_data.get("end_time") else None
+            session.end_reason = dict_data.get("end_reason")
+            session.duration = dict_data.get("duration")
+            session.is_active = dict_data.get("is_active", False)
+            session.tasks_started = dict_data.get("tasks_started", 0)
+            session.tasks_completed = dict_data.get("tasks_completed", 0)
+            
+            # TODO: cards_reviewed und review_logs rekonstruieren (später)
+            session.cards_reviewed = []
+            session.review_logs = []
+            
+            # user muss separat gesetzt werden (wird von außen übergeben)
+            session.user = None
+            
+            return session
 
 class CustomCard(DBObject, FSRSCard):
 
