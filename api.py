@@ -36,7 +36,7 @@ def get_user(username: str):
         return user
     return {"error": "User not found"}
 
-@app.get("/add_card")                                       # Karte hinzufügen
+@app.post("/add_card")                                       # Karte hinzufügen
 def add_card(card_dict: dict):
 
     if db["cards"].find_one({"_id": card_dict["_id"]}):

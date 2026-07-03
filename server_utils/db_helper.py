@@ -26,4 +26,7 @@ class DBHelper:
         return response        
 
 if __name__ == "__main__":
-    pass
+    db_helper = DBHelper()
+    response = db_helper.add_card({"name": "Test Card"})
+    print(response.status_code)
+    print(response.json())
