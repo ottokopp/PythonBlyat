@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 from fastapi import FastAPI
+from bson import ObjectId
 
 client = MongoClient("mongodb://116.203.251.38:27017")      # Verbindung zur MongoDB
 db = client["testdb"]       
@@ -36,16 +37,20 @@ def get_user(username: str):
     return {"error": "User not found"}
 
 @app.get("/add_card")                                       # Karte hinzufügen
-def add_card(title: str, owner: str):
-    result = db["cards"].insert_one({"title": title, "owner": owner})
-    return {"id": str(result.inserted_id), "title": title, "owner": owner}
+def add_card(card_dict: dict):
+
+    if db["cards"].find_one({"_id": card_dict["_id"]}):
+        return {"error": "Card of thet id already exists"}
+
+    result = db["cards"].insert_one(card_dict)
+    return {"id": str(result.inserted_id), **card_dict}
 
 @app.get("/get_card")                                       # Karte abrufen
-def get_card(title: str):
-    card = db["cards"].find_one({"title": title})
-    if card:
-        card["_id"] = str(card["_id"])
-        return card
+def get_card(id: str):
+    card_dict = db["cards"].find_one({"_id": ObjectId(id)})
+    if card_dict:
+        card_dict["_id"] = str(card["_id"])
+        return card_dict
     return {"error": "Card not found"}
 
 @app.get("/get_collection")                                 # Collection abrufen
